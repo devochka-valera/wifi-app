@@ -5,13 +5,18 @@ import {
     browserHistory
 } from 'react-router';
 
-import App from './views/app';
-import Home from './views/home';
+import District from './views/district';
+import Districts from './views/districts';
+import WifiPoint from './views/wifi-point';
+
 
 export default () => (
     <Router history={browserHistory}>
-        <Route path='/' component={App}>
-            <Route path='home' component={Home} />
+        <Route path='/districts' component={Districts}>
+        </Route>
+        <Route path='/districts/:name' component={District}>
+        </Route>
+        <Route path='/districts/:name/:id' component={WifiPoint}>
         </Route>
     </Router>
 );

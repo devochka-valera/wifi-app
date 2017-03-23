@@ -1,13 +1,22 @@
 import React from 'react';
-import { AppContainer } from 'react-hot-loader';
+import {AppContainer} from 'react-hot-loader';
 import ReactDOM  from 'react-dom';
 import AppRouter from './routes';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import {createStore} from 'redux'
+import {Provider} from 'react-redux'
+
+const store = createStore( () => {}, {})
 
 const render = (Component) =>
     ReactDOM.render(
-        <AppContainer>
-            <Component />
-        </AppContainer>,
+        <Provider store={store}>
+            <MuiThemeProvider>
+                <AppContainer>
+                    <Component />
+                </AppContainer>
+            </MuiThemeProvider>
+        </Provider>,
         document.getElementById('app')
     );
 
@@ -18,3 +27,4 @@ if (module.hot) {
         render(AppRouter);
     });
 }
+
