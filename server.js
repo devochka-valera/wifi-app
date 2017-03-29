@@ -1,5 +1,6 @@
 import express from 'express';
 import path from 'path';
+let proxy = require('http-proxy-middleware');
 
 const PORT = 7700;
 const USERS = [
@@ -12,6 +13,8 @@ const PUBLIC_PATH = __dirname + '/public';
 const app = express();
 const isDevelopment = process.env.NODE_ENV === 'development';
 
+
+app.use('/api', proxy({target: 'http://data.gov.spb.ru', changeOrigin: true}));
 if (isDevelopment) {
     const webpack = require('webpack');
     const webpackConfig = require('./webpack.config.babel').default;
@@ -34,6 +37,7 @@ app.get("/users", function(req, res) {
 app.all("*", function(req, res) {
     res.sendFile(path.resolve(PUBLIC_PATH, 'index.html'));
 });
+
 
 app.listen(PORT, function() {
     console.log('Listening on port ' + PORT + '...');

@@ -1,7 +1,10 @@
 import React from 'react';
-import injectTapEventPlugin from 'react-tap-event-plugin';
-
+import {connect} from 'react-redux'
 import {GridList, GridTile} from 'material-ui/GridList';
+import CircularProgress from 'material-ui/CircularProgress';
+import {makeAddressSelection} from "../actions/actions";
+import {browserHistory} from 'react-router'
+
 
 const styles = {
     root: {
@@ -16,59 +19,38 @@ const styles = {
     },
 };
 
-const tilesData = [
-    {
-        img: require('../assets/Адмиралтейский район.jpg'),
-        title: 'Breakfast',
-    },
-    {
-        img: require('../assets/astoria-hotel-143716_1920.jpg'),
-        title: 'Tasty burger',
-    },
-    {
-        img: require('../assets/st-petersburg-887049_1920.jpg'),
-        title: 'Camera',
-    },
-    {
-        img: require('../assets/st-petersburg-russia-97330_1920.jpg'),
-        title: 'Morning',
-    },
-    {
-        img: require('../assets/st-petersburg-russia-122038_1920.jpg'),
-        title: 'Hats',
-    },
-    {
-        img: require('../assets/Васильеовстровский район.jpg'),
-        title: 'Honey',
-    },
-    {
-        img: require('../assets/Выборгский район.jpg'),
-        title: 'Vegetables',
-    },
-    {
-        img: require('../assets/Калининский район.jpg'),
-        title: 'Water plant',
-    },
-];
+const tilesData = [];
+for (let imageIndex = 1; imageIndex < 48; imageIndex++) {
+    let image = require(`../assets/${imageIndex}.jpg`);
+    tilesData.push(image);
+}
 
-const GridListExampleSimple = () => (
-    <div style={styles.root}>
-        <GridList
-            cellHeight={180}
-            style={styles.gridList}
-        >
-            {tilesData.map((tile) => (
-                <GridTile
-                    key={tile.img}
-                    title={tile.title}
-                >
-                    <img src={tile.img}/>
+const Disticts = (props) => {
+    if (props.isLoading) {
+        return <div>
+            <CircularProgress size={80} thickness={5}/>
+        </div>
+    }
+
+    return <div style={styles.root}>
+        <GridList cols={4} style={styles.gridList}>
+            {props.addresses.map((tile, index) => (
+                <GridTile onClick={(e) => {
+                    e.preventDefault();
+                    browserHistory.push(`/districts/${tile}`);
+                    props.dispatch(makeAddressSelection(tile));
+                }} key={index} title={tile}>
+                    <img src={tilesData[index]}/>
                 </GridTile>
             ))}
         </GridList>
     </div>
-);
+};
 
-export default GridListExampleSimple;
+function mapStateToProps(state) {
+    return state
+}
 
-injectTapEventPlugin();
+export default connect(mapStateToProps)(Disticts)
+
+
